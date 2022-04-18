@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const { response } = require('express');
 
 const getUsers = async (req, res) => {
 
@@ -9,16 +10,34 @@ const getUsers = async (req, res) => {
 	});
 }
 
-const createUser = async (req, res) => {
+const createUser = async (req, res = response) => {
 	const { name, email, password } = req.body; //Desestructuracion del objeto body.
-	const user = new User(req.body);
+	
+	try {
+		const emailExist = await User.findOne({ email: email });
 
-	await user.save();
-
-	res.json({
-		ok: true,
-		user // es lo mismo que user: user, pero como es redundante solo ponemos user, porque el nombre de la propiedad es igual al de la variable
-	});
+		if (emailExist) {
+			return res.status(400).json({
+				ok: false,
+				message: 'Email already exists'
+			});
+		}
+		
+		const user = new User(req.body);
+		await user.save();
+	
+		res.json({
+			ok: true,
+			user // es lo mismo que user: user, pero como es redundante solo ponemos user, porque el nombre de la propiedad es igual al de la variable
+		});
+		
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			ok: false,
+			message: 'Unespected error'
+		});
+	}
 }
 
 
