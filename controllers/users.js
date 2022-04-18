@@ -1,9 +1,11 @@
 const User = require('../models/user');
 
-const getUsers = (req, res) => {
+const getUsers = async (req, res) => {
+
+	const users = await User.find({}, '_id name email role'); //Este metodo crea una consulta find que obtiene una lista de todos los usuarios. En este caso no pusimos nada como filtro. por eso el objeto vacio, pero como segundo parametro especificamos que propiedades del User model nos interesan.
 	res.json({
 		ok: true,
-		users: 'Get users'
+		users: users  
 	});
 }
 
