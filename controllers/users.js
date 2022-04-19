@@ -60,23 +60,20 @@ const updateUser = async (req, res) => {
 		}
 
 		//Update
-		const newUserData = req.body;
+		const { password, google, email, ...newUserData } = req.body;
 		
-		if (databaseUser.email === newUserData.email) {
-			delete newUserData.email;
-		} else {
-			const emailExist = User.findOne({ email: newUserData.email });
-			
+		if (databaseUser.email != email) {
+
+			const emailExist = await User.findOne({ email }); // es lo mismo que email: email
 			if (emailExist) {
 				return res.status(400).json({
 					ok: false,
 					message: 'There is already a user with that email'
 				});
+			} else {
+				newUserData.email = email;
 			}
 		}
-
-		delete newUserData.password;
-		delete newUserData.google;	
 		
 		const updatedUser = await User.findOneAndUpdate(uid, newUserData, { new: true }); // new: true para que siempre me devuelva la data nueva, de lo contrario mongoose me devuelve el usuario como estaba antes de ser actualizado, aunque en la db haya sido actualizado.
 		res.status(200).json({
