@@ -1,6 +1,6 @@
 // Route: /api/users
 const { Router } = require('express');
-const { getUsers, createUser, updateUser } = require('../controllers/users');
+const { getUsers, createUser, updateUser, deleteUser } = require('../controllers/users');
 const { check } = require('express-validator');
 const { fieldsValidations } = require('../middlewares/fields-validations');
 
@@ -20,8 +20,11 @@ router.put('/:id',
 	[
 		check('name', 'Field name is required').not().isEmpty(),
 		check('email', 'Field email is required').isEmail(),
-		check('role', 'Field email is required').isEmail()
+		check('role', 'Field email is required').isEmail(),
+		fieldsValidations
 	] , updateUser);
+
+router.delete('/:id', deleteUser);
 
 
 

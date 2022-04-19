@@ -45,7 +45,7 @@ const createUser = async (req, res = response) => {
 	}
 }
 
-const updateUser = async (req, res) => {
+const updateUser = async (req, res = response) => {
 	// Validate token and if user is correct.
 	const uid = req.params.id;
 
@@ -89,10 +89,40 @@ const updateUser = async (req, res) => {
 	}
 }
 
+const deleteUser = async (req, res = response) => {
+	const uid = req.params.id;
+	
+	try {
+		const databaseUser = await User.findById(uid);
+
+		if (!databaseUser) {
+			res.status(404).json({
+				ok: false,
+				message: 'User not found'
+			});
+		} else {
+			await User.findByIdAndDelete(uid);
+			res.status(200).json({
+				ok: true,
+				message: 'User deleted'
+			});
+		}
+		
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			ok: false,
+			message: 'Unespected error'
+		});
+	}
+
+}
+
 
 
 module.exports = {
 	getUsers,
 	createUser,
-	updateUser
+	updateUser,
+	deleteUser
 }
