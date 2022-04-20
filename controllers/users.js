@@ -7,7 +7,8 @@ const getUsers = async (req, res) => {
 	const users = await User.find({}, '_id name email role'); //Este metodo crea una consulta find que obtiene una lista de todos los usuarios. En este caso no pusimos nada como filtro. por eso el objeto vacio, pero como segundo parametro especificamos que propiedades del User model nos interesan.
 	res.status(200).json({
 		ok: true,
-		users: users  
+		uid: req.uid, // Esta data uid de la req viene del middleware validate-jwt
+		users: users
 	});
 }
 
@@ -101,7 +102,7 @@ const deleteUser = async (req, res = response) => {
 		const databaseUser = await User.findById(uid);
 
 		if (!databaseUser) {
-			res.status(404).json({
+			return res.status(404).json({
 				ok: false,
 				message: 'User not found'
 			});
