@@ -1,6 +1,7 @@
 const { response } = require('express'); // Response para tener las ayudas en el editor al momento de trabajar con el parametro res en las funciones 
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const { generateJWT } = require('../helpers/jwt');
 
 
 
@@ -28,10 +29,12 @@ const login = async (req, res = response) => { //async cuando tenemos que hacer 
 			});
 		}
 		// Generate JWT
+		const token = await generateJWT(databaseUser.id);
 
 		res.status(200).json({
 			ok: false,
-			user: databaseUser
+			user: databaseUser,
+			token
 		});
 	} catch (error) {
 		res.status(500).json({

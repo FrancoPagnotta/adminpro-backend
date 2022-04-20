@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const { response } = require('express');
 const bcrypt = require('bcrypt');
+const { generateJWT } = require('../helpers/jwt');
 
 const getUsers = async (req, res) => {
 	const users = await User.find({}, '_id name email role'); //Este metodo crea una consulta find que obtiene una lista de todos los usuarios. En este caso no pusimos nada como filtro. por eso el objeto vacio, pero como segundo parametro especificamos que propiedades del User model nos interesan.
@@ -27,13 +28,17 @@ const createUser = async (req, res = response) => {
 		//Encrypt password
 		const salt = bcrypt.genSaltSync();
 		user.password = bcrypt.hashSync(password, salt);
-		
+
 		//Save user
 		await user.save();
-	
+		
+		// Generate JWT
+		const token = await generateJWT(user.id);
+		
 		res.status(200).json({
 			ok: true,
-			user // es lo mismo que user: user, pero como es redundante solo ponemos user, porque el nombre de la propiedad es igual al de la variable
+			user, // es lo mismo que user: user, pero como es redundante solo ponemos user, porque el nombre de la propiedad es igual al de la variable
+			token: token
 		});
 		
 	} catch (error) {
