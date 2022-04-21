@@ -21,6 +21,7 @@ dbConection();
 
 //Routes
 app.use('/api/users', require('./routes/users')); //app.use() es un Middleware, que es una funcion que se puede ejecutar antes o despues del manejo de una ruta. Esta funcion tiene acceso al objeto Request, Response y la funcion next().
+app.use('/api/hospitals', require('./routes/hospitals'));
 app.use('/api/login', require('./routes/auth'));
 
 app.listen(process.env.PORT, () => {
