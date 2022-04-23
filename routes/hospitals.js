@@ -1,8 +1,13 @@
 // Route: /api/users
 const { Router } = require('express');
-const { check } = require('express-validator');
-const { getHospitals, createHospital, updateHospital, deleteHospital } = require('../controllers/hospitals');
-const { validateJWT } = require('../middlewares/validate-jwt');
+const { 
+	getHospitals, 
+	createHospital, 
+	updateHospital, 
+	deleteHospital
+	} = require('../controllers/hospitals');
+// const { check } = require('express-validator');
+// const { validateJWT } = require('../middlewares/validate-jwt');
 
 const router = Router();
 
