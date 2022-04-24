@@ -18,7 +18,8 @@ router.post('/',
 	], createUser);
 
 router.put('/:id',
-	[	validateJWT,
+	[	
+		validateJWT,
 		check('name', 'Field name is required').not().isEmpty(),
 		check('email', 'Field email is required').isEmail(),
 		check('role', 'Field role is required').not().isEmpty(),
