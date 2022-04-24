@@ -1,10 +1,13 @@
 const { response } = require('express');
 const Hospital = require('../models/hospital');
 
-const getHospitals = (req, res = response) => {
+const getHospitals = async (req, res = response) => {
+	const hospitals = await Hospital.find()
+									.populate('user', 'name email img'); // la propiedad user del objeto hospital tiene el id del usuario y esa propiedad user es de tipo User Schema, el cual tiene las propiedades del usuario, como el nombre, el email, etc.
+
 	res.status(200).json({
 		ok: true,
-		message: 'Endpoint getHospitals requestworks'
+		hospitals
 	});
 }
 
