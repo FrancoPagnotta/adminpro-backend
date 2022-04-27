@@ -3,6 +3,9 @@ const { request, response } = require('express');
 const bcrypt = require('bcrypt');
 const { generateJWT } = require('../helpers/jwt');
 
+
+
+
 const getUsers = async (req = request, res = response) => {
 	const pagination = Number(req.query.pagination) || 0;
 

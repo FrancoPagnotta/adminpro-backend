@@ -3,6 +3,7 @@ const Doctor = require('../models/doctor');
 
 
 
+
 const getDoctors = async (req, res = response) => {
 	const doctors = await Doctor.find()
 								.populate('user', 'name')
