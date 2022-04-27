@@ -24,6 +24,7 @@ app.use('/api/users', require('./routes/users')); //app.use() es un Middleware, 
 app.use('/api/hospitals', require('./routes/hospitals'));
 app.use('/api/doctors', require('./routes/doctors'));
 app.use('/api/login', require('./routes/auth'));
+app.use('/api/todo', require('./routes/searches'));
 
 app.listen(process.env.PORT, () => {
 	console.log('server runing on port 3000');
