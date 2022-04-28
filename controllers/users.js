@@ -9,7 +9,7 @@ const { generateJWT } = require('../helpers/jwt');
 const getUsers = async (req = request, res = response) => {
 	const pagination = Number(req.query.pagination) || 0;
 
-	const [ users, total ] = await Promise.all([ // Aca hacemos una desestructuracion de un array, por eso usamos const [users, total] y el Promise.all() es una promesa que se resuelve cuando se resuelve el array de promesas que le pasamos. De esta forma mejoramos la performance de nuestra funcion, haciendo que los resultados que se esperan de cada una de las promesas del array, sean entregados al mismo tiempo. Cuando ambas promesas se resuelven, ahi se resuelve la promesa madre y ahi es cuando podemos ver la data.
+	const [ users, total ] = await Promise.all([ // Aca hacemos una desestructuracion de un array, por eso usamos const [users, total] y el Promise.all() es una promesa que se resuelve cuando se resuelve el array de promesas que le pasamos. De esta forma mejoramos la performance de nuestra funcion, haciendo que los resultados que se esperan de cada una de las promesas del array, sean entregados al mismo tiempo. Cuando ambas promesas se resuelven, ahi se resuelve la promesa madre y ahi es cuando podemos ver la data. El valor de la primer promeise que se resuelve se almacena en la primera constante de nuestro array y el valor de la segunda promise en la segunda constante y asi sucesivamente.
 		await User.find({}, '_id name email role') //Este metodo crea una consulta find que obtiene una lista de todos los usuarios. En este caso no pusimos nada como filtro. por eso el objeto vacio, pero como segundo parametro especificamos que propiedades del User model nos interesan.
 			.skip(pagination)
 			.limit(5),
