@@ -9,7 +9,7 @@ const router = Router();
 
 router.use(fileUpload());
 
-router.put('/:collection/:id', validateJWT, uploadFiles);
+router.put('/:collection/:uid', validateJWT, uploadFiles);
 
 
 

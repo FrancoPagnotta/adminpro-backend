@@ -1,8 +1,8 @@
 const { request, response } = require('express');
 const { v4: uuidv4 } = require('uuid');
+const { updateImage } = require('../helpers/update-image');
 
 const uploadFiles = (req = request, res = response) => {
-	console.log(req.files)
 	const { collection, uid } = req.params;
 	const validCollections = ['users', 'doctors', 'hospitals'];
 	let file;
@@ -45,6 +45,8 @@ const uploadFiles = (req = request, res = response) => {
 				message: 'Error moving the file'
 			});
 		}
+
+		updateImage(collection, uid, fileName);
 
 		res.status(200).json({
 			ok: true,
