@@ -6,6 +6,13 @@ const { use } = require('bcrypt/promises');
 
 
 
+const deleteImage = (path) => {
+
+	if (fs.existsSync(path)) {
+		fs.unlinkSync(path);
+	}
+}
+
 const updateImage = async (collection, uid, fileName) => {
 	switch (collection) {
 		case 'users':
@@ -17,10 +24,7 @@ const updateImage = async (collection, uid, fileName) => {
 			} 
 
 			const userImg = `./uploads/users/${user.img}`;
-
-			if (fs.existsSync(userImg)) {
-				fs.unlinkSync(userImg);
-			}
+			deleteImage(userImg);
 
 			user.img = fileName;
 
@@ -30,10 +34,36 @@ const updateImage = async (collection, uid, fileName) => {
 
 		case 'doctors':
 			const doctor = await Doctor.findById(uid);
+
+			if (!doctor) {
+				console.log('doctor not found')
+				return false;
+			} 
+
+			const doctorImg = `./uploads/doctors/${doctor.img}`;
+			deleteImage(doctorImg);
+
+			doctor.img = fileName;
+
+			await doctor.save();
+
 			break;
 
 		case 'hospitals':
 			const hospital = await Hospital.findById(uid);
+
+			if (!hospital) {
+				console.log('hospital not found')
+				return false;
+			} 
+
+			const hospitalImg = `./uploads/hospitals/${hospital.img}`;
+			deleteImage(hospitalImg);
+
+			hospital.img = fileName;
+
+			await hospital.save();
+
 			break;
 	
 		default:
