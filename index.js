@@ -16,6 +16,9 @@ app.use(express.json());
 //db
 dbConection();
 
+// Public directory
+app.use(express.static('public')); // This middleware serves static files.
+
 //mean_user
 //6QBNpCUQW1JZijc1
 
