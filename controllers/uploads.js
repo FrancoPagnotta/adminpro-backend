@@ -1,5 +1,7 @@
 const { request, response } = require('express');
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid'); // It's useful for create a full path
+const path = require('path');
+const fs = require('fs');
 const { updateImage } = require('../helpers/update-image');
 
 const uploadFiles = (req = request, res = response) => {
@@ -56,7 +58,21 @@ const uploadFiles = (req = request, res = response) => {
 	});
 }
 
+const getFile = (req = request, res = response) => {
+	const { collection, image } = req.params;
+	const pathImage = path.join(__dirname, `../uploads/${collection}/${image}`); // Path module provides us utilities for work with the full path of files. In this case, with me join method we pass two arguments, __dirname (environment variable that tell us the absolute path of the directory containing the current excecuting file), and the path to the image, and get this C:\angular-advanced\backend\uploads\users\fb1a1286-9a15-40d5-8b61-e4e8f77988b3.jpg
+	const defaultImage = path.join(__dirname, '../uploads/no-img.jpg');
+
+	if (fs.existsSync(pathImage)) {
+		res.sendFile(pathImage);
+	} else {
+		res.sendFile(defaultImage);
+	}
+
+}	
+
 
 module.exports = {
-	uploadFiles
+	uploadFiles,
+	getFile
 }
