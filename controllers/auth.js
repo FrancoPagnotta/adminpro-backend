@@ -2,6 +2,7 @@ const { response } = require('express'); // Response para tener las ayudas en el
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const { generateJWT } = require('../helpers/jwt');
+const { verify } = require('../helpers/google-verify');
 
 
 
@@ -44,9 +45,34 @@ const login = async (req, res = response) => { //async cuando tenemos que hacer 
 	}
 }
 
+const googleSignIn = async (req = request, res = response) => {
+	const googleToken = req.body.token;
+
+	try {
+		const { name, email, picture } = await verify(googleToken);
+
+		res.status(200).json({
+			ok: true,
+			token: googleToken,
+			user: {
+				name,
+				email,
+				picture
+			},
+			message: 'Your account has been signed in successfully'
+		});
+	} catch (error) {
+		res.status(401).json({
+			ok: false,
+			message: 'Invalid token'
+		});
+	}
+}
+
 
 
 
 module.exports = { // En estos casos exportamos como objeto por si en un futuro decidimos agregar mas controladores.
-	login
+	login,
+	googleSignIn
 }
